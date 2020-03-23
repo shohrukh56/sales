@@ -21,7 +21,7 @@ func (s Server) InitRoutes() {
 	)
 	s.router.DELETE(
 		"/api/purchases/{id}",
-		s.handlePurchaseDelete(),
+		s.handleSalesDelete(),
 		authenticated.Authenticated(jwt.IsContextNonEmpty),
 		authorized.Authorized([]string{"Admin"}, jwt.FromContext),
 		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), s.secret),
@@ -30,14 +30,14 @@ func (s Server) InitRoutes() {
 
 	s.router.GET(
 		"/api/purchases/{id}",
-		s.handlePurchaseByID(),
+		s.handleSalesByID(),
 		authenticated.Authenticated(jwt.IsContextNonEmpty),
 		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), s.secret),
 		logger.Logger("get sales by id"),
 	)
 	s.router.GET(
 		"/api/purchases/users/{id}",
-		s.handlePurchaseByUser(),
+		s.handleSalesByUser(),
 		authenticated.Authenticated(jwt.IsContextNonEmpty),
 		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), s.secret),
 		logger.Logger("get sales by user_id"),
@@ -45,7 +45,7 @@ func (s Server) InitRoutes() {
 
 	s.router.POST(
 		"/api/purchases/{id}",
-		s.handlePurchase(),
+		s.handleSales(),
 		authenticated.Authenticated(jwt.IsContextNonEmpty),
 		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), s.secret),
 		logger.Logger("post new sales"),
